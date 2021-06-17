@@ -1,6 +1,7 @@
 package io.github.jsonSnapshot;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,8 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Arrays;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,6 @@ import com.fasterxml.jackson.core.PrettyPrinter;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter.Indenter;
-import com.fasterxml.jackson.core.util.Separators;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -207,10 +206,21 @@ public class SnapshotMatcher {
   }
 
   private static boolean hasTestAnnotation(Method method) {
-    return method.isAnnotationPresent(Test.class)
-        || method.isAnnotationPresent(BeforeClass.class)
-        || method.isAnnotationPresent(org.junit.jupiter.api.Test.class)
-        || method.isAnnotationPresent(BeforeAll.class);
+    if (method.isAnnotationPresent(Test.class) || method.isAnnotationPresent(BeforeAll.class)) {
+      return true;
+    }
+
+    for (Annotation annotation : method.getAnnotations()) {
+      switch (annotation.annotationType().getName()) {
+        case "org.junit.jupiter.api.BeforeAll":
+        case "org.junit.jupiter.api.Test":
+        case "org.junit.BeforeClass":
+        case "org.junit.Test":
+          return true;
+      }
+    }
+
+    return false;
   }
 
   private static Object[] mergeObjects(Object firstObject, Object[] others) {

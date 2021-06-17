@@ -6,25 +6,21 @@ import static io.github.jsonSnapshot.SnapshotUtils.extractArgs;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class BackwardCompatilbleTest {
 
-  @Mock private FakeObject fakeObject;
+  private FakeObject fakeObject = Mockito.mock(FakeObject.class);
 
-  @BeforeClass
+  @BeforeAll
   public static void beforeAll() {
     start();
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() {
     validateSnapshots();
   }
