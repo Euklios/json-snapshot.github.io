@@ -129,15 +129,7 @@ public class SnapshotMatcher {
 
   private static PrettyPrinter buildDefaultPrettyPrinter() {
     DefaultPrettyPrinter pp =
-        new DefaultPrettyPrinter("") {
-          @Override
-          public DefaultPrettyPrinter withSeparators(Separators separators) {
-            this._separators = separators;
-            this._objectFieldValueSeparatorWithSpaces =
-                separators.getObjectFieldValueSeparator() + " ";
-            return this;
-          }
-        };
+        new CustomDefaultPrettyPrinter("");
     Indenter lfOnlyIndenter = new DefaultIndenter("  ", "\n");
     pp.indentArraysWith(lfOnlyIndenter);
     pp.indentObjectsWith(lfOnlyIndenter);
