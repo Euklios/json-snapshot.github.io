@@ -60,9 +60,10 @@ public class SnapshotMatcher {
     try {
       StackTraceElement stackElement = findStackElement();
       clazz = Class.forName(stackElement.getClassName());
-      snapshotFile =
-          new SnapshotFile(
-              config.getFilePath(), stackElement.getClassName().replaceAll("\\.", "/") + ".snap");
+
+      final String filePath = stackElement.getClassName().replaceAll("\\.", "/") + "." + config.getFileExtension();
+      snapshotFile = new SnapshotFile(config.getFilePath(), filePath);
+
       snapshotMatchingStrategy = config.getSnapshotMatchingStrategy();
     } catch (ClassNotFoundException | IOException e) {
       throw new SnapshotMatchException(e.getMessage());

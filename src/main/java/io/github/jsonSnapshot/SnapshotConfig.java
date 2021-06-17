@@ -8,6 +8,8 @@ public interface SnapshotConfig {
     return "src/test/java/";
   }
 
+  default String getFileExtension() { return "snap"; }
+
   default SnapshotMatchingStrategy getSnapshotMatchingStrategy() {
     return StringEqualsMatchingStrategy.INSTANCE;
   }
